@@ -10,6 +10,7 @@ const app = express();
 const port = 3000;
 var color = '';
 var filename ='';
+var buffers = [];
 
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
@@ -39,7 +40,8 @@ app.post('/convert', (req, res) => {
 });
 
 app.post('/send_email', (req, res) => {
-	filename = generatePDF(req.body);
+	let pdfData = Buffer.concat(buffers);
+	sendMail(pdfData, req.body.email);
 	res.redirect('/');
 });
 
@@ -67,13 +69,8 @@ function sendMail(pdfData, destiny) {
 }
 
 function generatePDF(data) {
-	let buffers = [];
 	var doc = new PDF();
 	doc.on('data', buffers.push.bind(buffers));
-	doc.on('end', () =>{
-		//let pdfData = Buffer.concat(buffers);
-		//sendMail(pdfData, data.email);
-	});
 
 	doc.pipe(fs.createWriteStream(__dirname +'/public/' + data.title +'.pdf'));
 	doc.fillColor(color);

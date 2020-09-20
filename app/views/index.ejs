@@ -10,7 +10,11 @@
 </head>
 <body>
      <div class="container mt-4">
+           <% if(filename == ''){ %>
           <h1 class="text-center text-primary">Make your card!</h1>
+          <% } else{ %>
+          <h1 class="text-center text-primary">Send your card!</h1>
+          <% } %>
           <h3 class="text-center" style='color: <%=color%>'><%=color%></h3>
 
           <div class="row justify-content-center">
@@ -35,7 +39,7 @@
                <div id="pdf-viewer" class="col-md-6">
                     <embed class="w-100 h-100" src="<%=filename%>.pdf" type="application/pdf"></embed>
 
-                    <form action="/send_email">
+                    <form action="/send_email" method="POST">
                          <div class="form-group">
                               <label for="title">Destinatrio</label>
                               <input type="email" name="email" class="form-control" id="email" placeholder="Correo electrónico">
