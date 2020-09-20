@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "Microkernel": "file:../plugin-colors"
+    "Microkernel": "file:../plugin-colors",
+    "body-parser": "^1.19.0",
+    "pdfkit": "^0.11.0"
   },
   "devDependencies": {
     "ejs": "^3.1.5",
