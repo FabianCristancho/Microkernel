@@ -14,6 +14,7 @@
   "dependencies": {
     "Microkernel": "file:../plugin-colors",
     "body-parser": "^1.19.0",
+    "nodemailer": "^6.4.11",
     "pdfkit": "^0.11.0"
   },
   "devDependencies": {
