@@ -9,6 +9,8 @@ const fs = require('fs');
 const app = express();
 const port = 3000;
 var color = '';
+var filename ='';
+var buffers = [];
 
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
@@ -20,18 +22,26 @@ var transporter = nodemailer.createTransport({
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+
 app.get('/', (req, res) => {
 	color = colors.randomColor();
-	res.render('index', { color });
+	res.render('index', { color, filename });
 });
 
 app.post('/convert', (req, res) => {
 	console.log('Título:\n' + req.body.title);
 	console.log('Cuerpo: \n' + req.body.bodyText);
-	generatePDF(req.body);
+	filename = generatePDF(req.body);
+	res.redirect('/');
+});
+
+app.post('/send_email', (req, res) => {
+	let pdfData = Buffer.concat(buffers);
+	sendMail(pdfData, req.body.email);
 	res.redirect('/');
 });
 
@@ -48,6 +58,7 @@ function sendMail(pdfData, destiny) {
 			}
 		]
 	};
+
 	transporter.sendMail(mailOptions, function(err, info) {
 		if (err) {
 			console.log(err);
@@ -58,23 +69,23 @@ function sendMail(pdfData, destiny) {
 }
 
 function generatePDF(data) {
-	let buffers = [];
 	var doc = new PDF();
 	doc.on('data', buffers.push.bind(buffers));
-	doc.on('end', () =>{
-		let pdfData = Buffer.concat(buffers);
-		sendMail(pdfData, data.email);
-	})
-	doc.pipe(fs.createWriteStream(__dirname +'/public/' +data.title +'.pdf'));
+
+	doc.pipe(fs.createWriteStream(__dirname +'/public/' + data.title +'.pdf'));
 	doc.fillColor(color);
 	doc.text(data.title, {
 		align: 'center'
 	});
+
 	doc.text('\n\n\n');
 	doc.text(data.bodyText, {
 		align: 'justify'
 	});
+
 	doc.end();
+
+	return data.title;
 }
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
