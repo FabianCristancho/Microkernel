@@ -10,13 +10,17 @@
 </head>
 <body>
      <div class="container mt-4">
-          <h1 class="text-center text-primary">Make your card!</h1>
+          <h1 class="text-center text-primary">TEXT EDIT</h1>
           <h3 class="text-center" style='color: <%=color%>'><%=color%></h3>
 
           <div class="row justify-content-center">
-               <% if(filename == ''){ %>
                <div class="col-md-6">
                     <form action="/convert" method="POST">
+                         <div class="form-group">
+                              <label for="title">Destinatrio</label>
+                              <input type="email" name="email" class="form-control" id="email" placeholder="Correo electrónico">
+                         </div>
+
                          <div class="form-group">
                               <label for="title">Título de la Tarjeta</label>
                               <input type="text" name="title" class="form-control text-center" id="title" placeholder="Título">
@@ -27,25 +31,16 @@
                               <textarea class="form-control" name="bodyText" id="bodyText" cols="74" rows="10"></textarea>
                          </div>
 
-                         <button type="submit" value="Convertir" class="btn btn-primary btn-block" >Convertir</button>
+                         <button type="submit" value="Enviar" class="btn btn-primary btn-block" disabled="">Convertir</button>
                     </form>
                </div>
 
-               <%} if(filename != ''){ %>
-               <div id="pdf-viewer" class="col-md-6">
-                    <embed class="w-100 h-100" src="<%=filename%>.pdf" type="application/pdf"></embed>
-
-                    <form action="/send_email">
-                         <div class="form-group">
-                              <label for="title">Destinatrio</label>
-                              <input type="email" name="email" class="form-control" id="email" placeholder="Correo electrónico">
-                         </div>
-                         
-                         <button type="submit" value="Enviar" class="btn btn-primary btn-block" >Enviar</button>
-                    </form>
+               <div class="col-md-6">
+                    <embed class="w-100" src="http://docs.google.com/gview?url=http://victorpimentel.com/stuff/rubik.pdf&embedded=true" type="application/pdf">
                </div>
-               <%}%>
           </div>
+
+          
      </div>
      
      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
