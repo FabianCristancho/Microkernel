@@ -1,5 +1,6 @@
 const express = require('express');
-const colors = require('Microkernel');
+const colors = require('plugin-colors');
+const messages = require('plugin-message');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -20,15 +21,16 @@ var transporter = nodemailer.createTransport({
 	}
 });
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '/public/views'));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '/public')));
 
 
 app.get('/', (req, res) => {
-	color = colors.randomColor();
+  color = colors.randomColor();
 	res.render('index', { color, filename });
 });
 
@@ -43,6 +45,9 @@ app.post('/send_email', (req, res) => {
 	let pdfData = Buffer.concat(buffers);
 	sendMail(pdfData, req.body.email);
 	res.redirect('/');
+});
+app.get('/generate', (req, res) => {
+	res.json(messages.randomMessage());
 });
 
 function sendMail(pdfData, destiny) {
