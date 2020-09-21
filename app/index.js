@@ -44,6 +44,8 @@ app.post('/convert', (req, res) => {
 app.post('/send_email', (req, res) => {
 	let pdfData = Buffer.concat(buffers);
 	sendMail(pdfData, req.body.email);
+	filename = '';
+	buffers =[];
 	res.redirect('/');
 });
 app.get('/generate', (req, res) => {
