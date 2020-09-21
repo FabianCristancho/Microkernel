@@ -10,31 +10,47 @@
 </head>
 <body>
      <div class="container mt-4">
-          <h1 class="text-center text-primary">TEXT EDIT</h1>
+           <% if(filename == ''){ %>
+          <h1 class="text-center text-primary">Make your card!</h1>
+          <% } else{ %>
+          <h1 class="text-center text-primary">Send your card!</h1>
+          <% } %>
           <h3 class="text-center" style='color: <%=color%>'><%=color%></h3>
 
           <div class="row justify-content-center">
+               <% if(filename == ''){ %>
                <div class="col-md-6">
                     <form action="/convert" method="POST">
                          <div class="form-group">
-                              <label for="title">Destinatrio</label>
-                              <input type="email" name="email" class="form-control" id="email" placeholder="Correo electrónico">
+                              <button type="button" class="btn btn-outline-info btn-block" onclick="generate()">Generar mensaje predeterminado</button>
                          </div>
+
                          <div class="form-group">
                               <label for="title">Títutlo de la Tarjeta</label>
                               <input type="text" name="title" class="form-control text-center" id="title" placeholder="Título">
                          </div>
-                         <div class="form-group">
-                              <label for="title">Generar Mensaje Predeterminado</label>
-                              <button type="button" class="btn btn-outline-info" onclick="generate()"> Generar </button>
-                         </div>
+
                          <div class="form-group">
                               <label for="bodyText">Cuerpo del texto</label>
-                              <textarea name="bodyText" id="bodyText" cols="74" rows="10"></textarea>
+                              <textarea class="form-control" name="bodyText" id="bodyText" cols="74" rows="10"></textarea>
                          </div>
-                         <button type="submit" value="Enviar" class="btn btn-outline-primary">Convertir</button>
+                         <button type="submit" value="Enviar" class="btn btn-primary btn-block">Convertir</button>
                     </form>
                </div>
+                <%} if(filename != ''){ %>
+               <div id="pdf-viewer" class="col-md-6">
+                    <embed class="w-100 h-100" src="<%=filename%>.pdf" type="application/pdf"></embed>
+
+                    <form action="/send_email" method="POST">
+                         <div class="form-group">
+                              <label for="title">Destinatrio</label>
+                              <input type="email" name="email" class="form-control" id="email" placeholder="Correo electrónico">
+                         </div>
+                         
+                         <button type="submit" value="Enviar" class="btn btn-primary btn-block" >Enviar</button>
+                    </form>
+               </div>
+               <%}%>
           </div>
 
           
