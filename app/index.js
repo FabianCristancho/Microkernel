@@ -1,6 +1,7 @@
 const express = require('express');
 const colors = require('plugin-colors');
 const messages = require('plugin-message');
+const templates = require('plugin-templates');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -80,6 +81,10 @@ function generatePDF(data) {
 	doc.on('data', buffers.push.bind(buffers));
 
 	doc.pipe(fs.createWriteStream(__dirname +'/public/' + data.title +'.pdf'));
+
+	if(data.template !== 'none')
+		templates.applyTemplate(doc, data.template);
+
 	doc.fillColor(color);
 	doc.text(data.title, {
 		align: 'center'
