@@ -10,6 +10,7 @@ const PDF = require('pdfkit');
 const fs = require('fs');
 const app = express();
 const port = 3000;
+var title = '';
 var color = '';
 var filename ='';
 var buffers = [];
@@ -38,6 +39,7 @@ app.get('/', (req, res) => {
 app.post('/convert', (req, res) => {
 	console.log('Título:\n' + req.body.title);
 	console.log('Cuerpo: \n' + req.body.bodyText);
+	title = req.body.title;
 	filename = generatePDF(req.body);
 	res.redirect('/');
 });
@@ -49,6 +51,7 @@ app.post('/send_email', (req, res) => {
 	buffers =[];
 	res.redirect('/');
 });
+
 app.get('/generate', (req, res) => {
 	res.json(messages.randomMessage());
 });
@@ -57,7 +60,7 @@ function sendMail(pdfData, destiny) {
 	var mailOptions = {
 		from: 'distributed.systemUPTC@gmail.com',
 		to: destiny,
-		subject: 'CORREO PRUEBA DESDE NODEJS - PDF',
+		subject: title,
 		text: 'Email con tarjeta de felicitación',
 		attachments: [
 			{
